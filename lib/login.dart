@@ -1,3 +1,4 @@
+import 'package:ecommerce_on_25/home.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -22,6 +23,9 @@ class LoginState extends StatefulWidget{
 
 class LoginMain extends State<LoginState>{
 
+  GlobalKey<FormState> formKey = GlobalKey();
+  late String sEmail, sPassword;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -43,54 +47,88 @@ class LoginMain extends State<LoginState>{
                 width: 100.0,
                 height: 100.0,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-                child: TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
+              Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                      child: TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          hintText: "Enter Email Id",
+                          labelText: "Email Id"
+                        ),
+                        validator: (value){
+                          if(value!.isEmpty){
+                            return "Email Id Required";
+                          }
+                          else{
+                            return null;
+                          }
+                        },
+                        onSaved: (value){
+                          sEmail = value!;
+                        },
+                      ),
                     ),
-                    hintText: "Enter Email Id",
-                    labelText: "Email Id"
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-                child: TextField(
-                  obscureText: true,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                      child: TextFormField(
+                        obscureText: true,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          hintText: "Enter Password",
+                          labelText: "Password"
+                        ),
+                        validator: (value){
+                          if(value!.isEmpty){
+                            return "Password Required";
+                          }
+                          else{
+                            return null;
+                          }
+                        },
+                        onSaved: (value){
+                          sPassword = value!;
+                        },
+                      ),
                     ),
-                    hintText: "Enter Password",
-                    labelText: "Password"
-                  ),
-                ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Container(
+                        width: 150.0,
+                        height: 40.0,
+                        color: Colors.brown.shade400,
+                        child: TextButton(
+                          onPressed: (){
+                            if(formKey.currentState!.validate()){
+                              formKey.currentState!.save();
+                              print("Login Successfully. \nEmail id : $sEmail, Password : $sPassword");
+                              Fluttertoast.showToast(
+                                gravity: ToastGravity.BOTTOM,
+                                msg: "Login Successfully",
+                                toastLength: Toast.LENGTH_LONG
+                              );
+                              Navigator.push(context, MaterialPageRoute(builder: (_) => HomeState(sEmail,sPassword)));
+                            }
+                          }, 
+                          child: Text(
+                            "Login",
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20.0),),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Container(
-                  width: 150.0,
-                  height: 40.0,
-                  color: Colors.brown.shade400,
-                  child: TextButton(
-                    onPressed: (){
-                      print("Login Successfully");
-                      Fluttertoast.showToast(
-                        gravity: ToastGravity.BOTTOM,
-                        msg: "Login Successfully",
-                        toastLength: Toast.LENGTH_LONG
-                      );
-                    }, 
-                    child: Text(
-                      "Login",
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20.0),),
-                  ),
-                ),
-              ),
+              
             ],
           ),
         ),
