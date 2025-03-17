@@ -1,4 +1,6 @@
+import 'package:ecommerce_on_25/custom_list.dart';
 import 'package:ecommerce_on_25/home.dart';
+import 'package:ecommerce_on_25/list.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -116,7 +118,8 @@ class LoginMain extends State<LoginState>{
                                 msg: "Login Successfully",
                                 toastLength: Toast.LENGTH_LONG
                               );
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => HomeState(sEmail,sPassword)));
+                              //Navigator.push(context, MaterialPageRoute(builder: (_) => HomeState(sEmail,sPassword)));
+                              Navigator.push(context, MaterialPageRoute(builder: (_) => CustomListState()));
                             }
                           }, 
                           child: Text(
