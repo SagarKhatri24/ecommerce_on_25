@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:ecommerce_on_25/bottom_nav.dart';
 import 'package:ecommerce_on_25/custom_list.dart';
+import 'package:ecommerce_on_25/navigationDemo.dart';
+import 'package:ecommerce_on_25/tabDemo.dart';
 import 'package:flutter/material.dart';
 
 class SplashDemo extends StatelessWidget{
@@ -37,7 +40,7 @@ class SplashMain extends State<SplashState>{
     return new Timer(
       Duration(seconds: 3), 
       (){
-        Navigator.push(context, MaterialPageRoute(builder: (_)=> CustomListState()));
+        Navigator.push(context, MaterialPageRoute(builder: (_)=> BottomState()));
       }
     );
   }
