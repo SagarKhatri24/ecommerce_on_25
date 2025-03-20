@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ecommerce_on_25/bottom_nav.dart';
 import 'package:ecommerce_on_25/custom_list.dart';
 import 'package:ecommerce_on_25/navigationDemo.dart';
+import 'package:ecommerce_on_25/sqliteDemo.dart';
 import 'package:ecommerce_on_25/tabDemo.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,7 @@ class SplashMain extends State<SplashState>{
     return new Timer(
       Duration(seconds: 3), 
       (){
-        Navigator.push(context, MaterialPageRoute(builder: (_)=> BottomState()));
+        Navigator.push(context, MaterialPageRoute(builder: (_)=> SqliteApp()));
       }
     );
   }
