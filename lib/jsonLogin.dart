@@ -1,6 +1,13 @@
+import 'dart:convert';
+
 import 'package:ecommerce_on_25/JsonSignup.dart';
+import 'package:ecommerce_on_25/constantSp.dart';
+import 'package:ecommerce_on_25/jsonProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class JsonLoginApp extends StatelessWidget{
 
@@ -108,9 +115,13 @@ class JsonLoginMain extends State<JsonLoginState>{
                           height: 40.0,
                           color: Colors.brown.shade400,
                           child: TextButton(
-                            onPressed: (){
+                            onPressed: () async {
                               if(formKey.currentState!.validate()){
                                 formKey.currentState!.save();
+                                var connectivity = await(Connectivity().checkConnectivity());
+                                if(connectivity == ConnectivityResult.wifi || connectivity == ConnectivityResult.mobile){
+                                  loginData(sEmail,sPassword);
+                                }
                               }
                             }, 
                             child: Text(
@@ -145,6 +156,64 @@ class JsonLoginMain extends State<JsonLoginState>{
         ),
       ),
     );
+  }
+
+  loginData(String email, String password) async {
+
+    var sp = await SharedPreferences.getInstance();
+
+    var map = {
+      "email" : email,
+      "password" : password
+    };
+
+    var data = await http.post(Uri.parse(ConstantSp.LOGIN_URL),body: map);
+    if(data.statusCode == 200){
+        var jsonData = jsonDecode(data.body);
+        if(jsonData["status"] == true){
+          Fluttertoast.showToast(
+            msg: jsonData["message"],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM
+          );
+          var userData = jsonData["UserData"];
+          for(int i=0; i< userData.toString().length;i++){
+            var sUserId = userData[i]["userid"];
+            var sFirstName = userData[i]["first_name"];
+            var sLastName = userData[i]["last_name"];
+            var sEmail = userData[i]["email"];
+            var sContact = userData[i]["contact"];
+            var sGender = userData[i]["gender"];
+            var sProfile = userData[i]["profile"];
+
+            sp.setString(ConstantSp.USERID, sUserId);
+            sp.setString(ConstantSp.FIRSTNAME, sFirstName);
+            sp.setString(ConstantSp.LASTNAME, sLastName);
+            sp.setString(ConstantSp.EMAIL, sEmail);
+            sp.setString(ConstantSp.CONTACT, sContact);
+            sp.setString(ConstantSp.GENDER, sGender);
+            sp.setString(ConstantSp.PROFILE, sProfile);
+
+          }
+          Navigator.push(context, MaterialPageRoute(builder: (_)=> JsonProfileState()));
+          //Navigator.pop(context);
+        }
+        else{
+          Fluttertoast.showToast(
+            msg: jsonData["message"],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM
+          );
+        }
+    }
+    else{
+      Fluttertoast.showToast(
+        msg: "Server Error Code : ${data.statusCode}",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM
+      );
+    }
+
   }
 
 }

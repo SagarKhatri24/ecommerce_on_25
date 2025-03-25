@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
-class JsonSignupState extends StatefulWidget{
+class JsonProfileState extends StatefulWidget{
 
   @override
-  JsonSignupMain createState() => JsonSignupMain();
+  JsonProfileMain createState() => JsonProfileMain();
 
 }
 
-class JsonSignupMain extends State<JsonSignupState>{
+class JsonProfileMain extends State<JsonProfileState>{
 
   GlobalKey<FormState> formKey = GlobalKey();
   late String sFirstName,sLastName,sEmail,sContact, sPassword, sGender;
@@ -25,7 +25,7 @@ class JsonSignupMain extends State<JsonSignupState>{
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Json Signup",
+          "Json Profile",
           style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.blueGrey.shade200,
@@ -258,12 +258,12 @@ class JsonSignupMain extends State<JsonSignupState>{
                                 formKey.currentState!.save();
                                 var connectivity = await(Connectivity().checkConnectivity());
                                 if(connectivity == ConnectivityResult.wifi || connectivity == ConnectivityResult.mobile){
-                                  insertData(sFirstName,sLastName,sEmail,sContact,sPassword,sGender);
+                                  //UpdateData(sFirstName,sLastName,sEmail,sContact,sPassword,sGender);
                                 }
                               }
                             }, 
                             child: Text(
-                              "Signup",
+                              "Update",
                               style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20.0),),
                           ),
                         ),
@@ -290,7 +290,7 @@ class JsonSignupMain extends State<JsonSignupState>{
     );
   }
 
-  insertData(String firstName,String lastName, String email, String contact, String password, String gender) async {
+  updateData(String firstName,String lastName, String email, String contact, String password, String gender) async {
     var map = {
       "firstname" : firstName,
       "lastname" : lastName,

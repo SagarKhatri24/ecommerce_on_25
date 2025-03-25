@@ -2,12 +2,15 @@ import 'dart:async';
 
 import 'package:ecommerce_on_25/JsonSignup.dart';
 import 'package:ecommerce_on_25/bottom_nav.dart';
+import 'package:ecommerce_on_25/constantSp.dart';
 import 'package:ecommerce_on_25/custom_list.dart';
 import 'package:ecommerce_on_25/jsonLogin.dart';
+import 'package:ecommerce_on_25/jsonProfile.dart';
 import 'package:ecommerce_on_25/navigationDemo.dart';
 import 'package:ecommerce_on_25/sqliteDemo.dart';
 import 'package:ecommerce_on_25/tabDemo.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashDemo extends StatelessWidget{
 
@@ -40,10 +43,17 @@ class SplashMain extends State<SplashState>{
   }
 
   Future<Timer> startTimerMethod() async{
+    var sp = await SharedPreferences.getInstance();
+    var sUserId = sp.getString(ConstantSp.USERID) ?? "";
     return new Timer(
       Duration(seconds: 3), 
       (){
-        Navigator.push(context, MaterialPageRoute(builder: (_)=> JsonLoginApp()));
+        if(sUserId == ""){
+          Navigator.push(context, MaterialPageRoute(builder: (_)=> JsonLoginApp()));
+        }
+        else{
+          Navigator.push(context, MaterialPageRoute(builder: (_)=> JsonProfileState()));
+        }
       }
     );
   }
