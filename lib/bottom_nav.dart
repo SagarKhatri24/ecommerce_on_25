@@ -4,6 +4,8 @@ import 'package:ecommerce_on_25/status.dart';
 import 'package:flutter/material.dart';
 
 class BottomState extends StatefulWidget{
+  const BottomState({super.key});
+
 
   @override
   BottomMain createState() => BottomMain();
@@ -23,7 +25,7 @@ class BottomMain extends State<BottomState>{
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             "Bottom Navigation",
             style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
           ),
@@ -31,7 +33,7 @@ class BottomMain extends State<BottomState>{
         ),
         body: tabArray[selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
-          items: [
+          items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: "Home"

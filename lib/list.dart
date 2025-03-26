@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ListState extends StatefulWidget{
+  const ListState({super.key});
+
 
   @override
   ListMain createState() => ListMain();
@@ -21,7 +23,7 @@ class ListMain extends State<ListState>{
     //throw UnimplementedError();
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "List",
           style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
         ),

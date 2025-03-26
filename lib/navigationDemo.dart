@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class NavigationState extends StatefulWidget{
+  const NavigationState({super.key});
+
 
   @override
   NavigationMain createState() => NavigationMain();
@@ -18,37 +20,37 @@ class NavigationMain extends State<NavigationState>{
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             "Navigation Drawer",
             style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
           ),
           backgroundColor: Colors.blueGrey.shade200,
         ),
         drawer: Drawer(
-          child: new ListView(
+          child: ListView(
             children: [
-              UserAccountsDrawerHeader(
+              const UserAccountsDrawerHeader(
                 accountName: Text("User Name"), 
                 accountEmail: Text("username@gmail.com"),
                 currentAccountPicture: Icon(Icons.verified_user),
               ),
               ListTile(
-                leading: Icon(Icons.home),
-                title: Text("Home"),
+                leading: const Icon(Icons.home),
+                title: const Text("Home"),
                 onTap: (){
                   showMessage("Home");
                 },
               ),
               ListTile(
-                leading: Icon(Icons.verified_user),
-                title: Text("Profile"),
+                leading: const Icon(Icons.verified_user),
+                title: const Text("Profile"),
                 onTap: (){
                   showMessage("Profile");
                 },
               ),
               ListTile(
-                leading: Icon(Icons.logout),
-                title: Text("Logout"),
+                leading: const Icon(Icons.logout),
+                title: const Text("Logout"),
                 onTap: (){
                   showMessage("Logout");
                 },

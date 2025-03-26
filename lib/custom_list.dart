@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomListState extends StatefulWidget{
+  const CustomListState({super.key});
+
 
   @override
   CustomListMain createState() => CustomListMain();
@@ -15,7 +17,7 @@ class CustomListMain extends State<CustomListState>{
     //throw UnimplementedError();
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Custom List",
           style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
         ),
@@ -33,6 +35,8 @@ class CustomListDesign extends StatelessWidget{
   List<String> leadingArray = ["bronze_medal.png","silver-medal.png","gold_medal.png","platinum.png"];
   String imagePath = "asset/icons/";
 
+  CustomListDesign({super.key});
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -41,11 +45,11 @@ class CustomListDesign extends StatelessWidget{
       itemCount: titleArray.length,
       itemBuilder: (context,position){
         return Padding(
-          padding: EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
           child: Card(
             elevation: 3.0,
             child: Padding(
-              padding: EdgeInsets.all(3.0),
+              padding: const EdgeInsets.all(3.0),
               child: Row(
                 children: [
                   Image.asset(
@@ -54,7 +58,7 @@ class CustomListDesign extends StatelessWidget{
                     height: 100.0,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 10.0),
+                    padding: const EdgeInsets.only(left: 10.0),
                     child: Text(titleArray[position]),
                   ),
                 ],

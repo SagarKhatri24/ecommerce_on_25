@@ -6,19 +6,19 @@ import 'package:sqflite/sqflite.dart';
 
 class SqliteDatabaseHelper{
 
-  static final databaseName = "student.db";
-  static final databaseVersion = 1;
+  static const databaseName = "student.db";
+  static const databaseVersion = 1;
 
-  static final tableName = "users";
+  static const tableName = "users";
 
-  static final columnId = "id";
-  static final columnName = "name";
-  static final columnEmail = "email";
-  static final columnContact = "contact";
-  static final columnPassword = "password";
+  static const columnId = "id";
+  static const columnName = "name";
+  static const columnEmail = "email";
+  static const columnContact = "contact";
+  static const columnPassword = "password";
 
   static final SqliteDatabaseHelper instance = SqliteDatabaseHelper();
-  Database? databaseMain = null;
+  Database? databaseMain;
 
   Future<Database?> get database async{
     if(databaseMain!=null) return databaseMain;

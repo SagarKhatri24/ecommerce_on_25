@@ -7,6 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class JsonSignupState extends StatefulWidget{
+  const JsonSignupState({super.key});
+
 
   @override
   JsonSignupMain createState() => JsonSignupMain();
@@ -24,7 +26,7 @@ class JsonSignupMain extends State<JsonSignupState>{
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Json Signup",
           style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
         ),
@@ -184,7 +186,7 @@ class JsonSignupMain extends State<JsonSignupState>{
                                       });
                                     }
                                   ),
-                                  Text(
+                                  const Text(
                                     "Male",
                                     style: TextStyle(
                                       color: Colors.black,
@@ -208,7 +210,7 @@ class JsonSignupMain extends State<JsonSignupState>{
                                       });
                                     }
                                   ),
-                                  Text(
+                                  const Text(
                                     "Female",
                                     style: TextStyle(
                                       color: Colors.black,
@@ -232,7 +234,7 @@ class JsonSignupMain extends State<JsonSignupState>{
                                       });
                                     }
                                   ),
-                                  Text(
+                                  const Text(
                                     "Transgender",
                                     style: TextStyle(
                                       color: Colors.black,
@@ -262,7 +264,7 @@ class JsonSignupMain extends State<JsonSignupState>{
                                 }
                               }
                             }, 
-                            child: Text(
+                            child: const Text(
                               "Signup",
                               style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20.0),),
                           ),

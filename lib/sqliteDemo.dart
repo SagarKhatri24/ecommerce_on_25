@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class SqliteApp extends StatelessWidget{
+  const SqliteApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,8 @@ class SqliteApp extends StatelessWidget{
 }
 
 class SqliteState extends StatefulWidget{
+  const SqliteState({super.key});
+
 
   @override
   SqliteMain createState() => SqliteMain();
@@ -35,7 +39,7 @@ class SqliteMain extends State<SqliteState>{
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Sqlite",
           style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
         ),
@@ -167,7 +171,7 @@ class SqliteMain extends State<SqliteState>{
                                 insertData(sName,sEmail,sContact,sPassword);
                               }
                             }, 
-                            child: Text(
+                            child: const Text(
                               "Insert",
                               style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20.0),),
                           ),
@@ -186,7 +190,7 @@ class SqliteMain extends State<SqliteState>{
                                 updateData(sName,sEmail,sContact,sPassword);
                               }
                             }, 
-                            child: Text(
+                            child: const Text(
                               "Update",
                               style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20.0),),
                           ),
@@ -203,7 +207,7 @@ class SqliteMain extends State<SqliteState>{
                               formKey.currentState!.save();
                               deleteData(sContact);
                             }, 
-                            child: Text(
+                            child: const Text(
                               "Delete",
                               style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20.0),),
                           ),
@@ -219,7 +223,7 @@ class SqliteMain extends State<SqliteState>{
                             onPressed: (){
                               showData();
                             }, 
-                            child: Text(
+                            child: const Text(
                               "Show",
                               style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20.0),),
                           ),
@@ -236,7 +240,7 @@ class SqliteMain extends State<SqliteState>{
                               formKey.currentState!.save();
                               searchData(sContact);
                             }, 
-                            child: Text(
+                            child: const Text(
                               "Search",
                               style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20.0),),
                           ),

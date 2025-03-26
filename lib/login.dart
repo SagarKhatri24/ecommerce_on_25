@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginApp extends StatelessWidget{
+  const LoginApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +19,8 @@ class LoginApp extends StatelessWidget{
 }
 
 class LoginState extends StatefulWidget{
+  const LoginState({super.key});
+
 
   @override
   LoginMain createState() => LoginMain();
@@ -33,7 +37,7 @@ class LoginMain extends State<LoginState>{
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Login",
           style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
         ),
@@ -122,7 +126,7 @@ class LoginMain extends State<LoginState>{
                               Navigator.push(context, MaterialPageRoute(builder: (_) => CustomListState()));
                             }
                           }, 
-                          child: Text(
+                          child: const Text(
                             "Login",
                             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20.0),),
                         ),

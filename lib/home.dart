@@ -5,7 +5,7 @@ class HomeState extends StatefulWidget{
 
   String sEmail,sPassword;
 
-  HomeState(this.sEmail,this.sPassword);
+  HomeState(this.sEmail,this.sPassword, {super.key});
 
   @override
   HomeMain createState() => HomeMain();
@@ -27,7 +27,7 @@ class HomeMain extends State<HomeState>{
     //throw UnimplementedError();
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Home",
           style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
         ),
@@ -43,7 +43,7 @@ class HomeMain extends State<HomeState>{
                   flex: 1,
                   child: Container(
                     color: Colors.blue.shade200,
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.all(10.0),
                       child: Text(
                         "Email Id",
@@ -61,10 +61,10 @@ class HomeMain extends State<HomeState>{
                   child: Container(
                     color: Colors.blue.shade300,
                     child: Padding(
-                      padding: EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Text(
                         widget.sEmail,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18.0
                         ),
@@ -82,7 +82,7 @@ class HomeMain extends State<HomeState>{
                     flex: 1,
                     child: Container(
                       color: Colors.blue.shade200,
-                      child: Padding(
+                      child: const Padding(
                         padding: EdgeInsets.all(10.0),
                         child: Text(
                           "Password",
@@ -100,10 +100,10 @@ class HomeMain extends State<HomeState>{
                     child: Container(
                       color: Colors.blue.shade300,
                       child: Padding(
-                        padding: EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: Text(
                           widget.sPassword,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black,
                             fontSize: 18.0
                           ),
@@ -129,7 +129,7 @@ class HomeMain extends State<HomeState>{
                           });
                         }
                       ),
-                      Text(
+                      const Text(
                         "Male",
                         style: TextStyle(
                           color: Colors.black,
@@ -153,7 +153,7 @@ class HomeMain extends State<HomeState>{
                           });
                         }
                       ),
-                      Text(
+                      const Text(
                         "Female",
                         style: TextStyle(
                           color: Colors.black,
@@ -177,7 +177,7 @@ class HomeMain extends State<HomeState>{
                           });
                         }
                       ),
-                      Text(
+                      const Text(
                         "Transgender",
                         style: TextStyle(
                           color: Colors.black,
@@ -201,7 +201,7 @@ class HomeMain extends State<HomeState>{
                     });
                   },
                 ),
-                Text(
+                const Text(
                   "Android",
                   style: TextStyle(
                     color: Colors.black,
@@ -222,7 +222,7 @@ class HomeMain extends State<HomeState>{
                     });
                   },
                 ),
-                Text(
+                const Text(
                   "iOS",
                   style: TextStyle(
                     color: Colors.black,
@@ -243,7 +243,7 @@ class HomeMain extends State<HomeState>{
                     });
                   },
                 ),
-                Text(
+                const Text(
                   "Flutter",
                   style: TextStyle(
                     color: Colors.black,
@@ -264,7 +264,7 @@ class HomeMain extends State<HomeState>{
                     });
                   },
                 ),
-                Text(
+                const Text(
                   "React Native",
                   style: TextStyle(
                     color: Colors.black,
@@ -282,11 +282,11 @@ class HomeMain extends State<HomeState>{
                 color: Colors.brown.shade400,
                 child: TextButton(
                   onPressed: (){
-                    if(technologyArray.length>0){
+                    if(technologyArray.isNotEmpty){
                       print(technologyArray);
                     }
                   }, 
-                  child: Text(
+                  child: const Text(
                     "Show Technology",
                     style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20.0),),
                 ),

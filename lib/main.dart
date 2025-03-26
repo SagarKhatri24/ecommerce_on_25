@@ -1,4 +1,3 @@
-import 'package:ecommerce_on_25/login.dart';
 import 'package:ecommerce_on_25/splash.dart';
 import 'package:flutter/material.dart';
 

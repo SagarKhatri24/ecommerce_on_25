@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:ecommerce_on_25/constantSp.dart';
+import 'package:ecommerce_on_25/jsonLogin.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class JsonProfileState extends StatefulWidget{
+  const JsonProfileState({super.key});
 
   @override
   JsonProfileMain createState() => JsonProfileMain();
@@ -16,15 +19,54 @@ class JsonProfileState extends StatefulWidget{
 class JsonProfileMain extends State<JsonProfileState>{
 
   GlobalKey<FormState> formKey = GlobalKey();
-  late String sFirstName,sLastName,sEmail,sContact, sPassword, sGender;
+  late String sId,sFirstName,sLastName,sEmail,sContact, sPassword, sGender,sProfile;
   int iGroupValue = 4;
+  var firstNameController,lastNameController,emailController,contactController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setData();
+  }
+
+  setData() async{
+    var sp = await SharedPreferences.getInstance();
+    setState(() {
+      sId = sp.getString(ConstantSp.USERID) ?? "";
+      sFirstName = sp.getString(ConstantSp.FIRSTNAME) ?? "";
+      sLastName = sp.getString(ConstantSp.LASTNAME) ?? "";
+      sEmail = sp.getString(ConstantSp.EMAIL) ?? "";
+      sContact = sp.getString(ConstantSp.CONTACT) ?? "";
+      sGender = sp.getString(ConstantSp.GENDER) ?? "";
+      sProfile = sp.getString(ConstantSp.PROFILE) ?? "";
+
+      if(sGender == "Male"){
+        iGroupValue = 0;
+      } 
+      else if(sGender == "Female"){
+        iGroupValue = 1;
+      }
+      else if(sGender == "Trangender"){
+        iGroupValue = 2;
+      }
+      else{
+        iGroupValue = 0;
+      }
+
+      firstNameController = TextEditingController(text: sFirstName);
+      lastNameController = TextEditingController(text: sLastName);
+      emailController = TextEditingController(text: sEmail);
+      contactController = TextEditingController(text: sContact);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Json Profile",
           style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
         ),
@@ -48,6 +90,7 @@ class JsonProfileMain extends State<JsonProfileState>{
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                         child: TextFormField(
+                          controller: firstNameController,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -72,6 +115,7 @@ class JsonProfileMain extends State<JsonProfileState>{
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                         child: TextFormField(
+                          controller: lastNameController,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -96,6 +140,7 @@ class JsonProfileMain extends State<JsonProfileState>{
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                         child: TextFormField(
+                          controller: emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -120,6 +165,7 @@ class JsonProfileMain extends State<JsonProfileState>{
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                         child: TextFormField(
+                          controller: contactController,
                           keyboardType: TextInputType.phone,
                           maxLength: 10,
                           decoration: InputDecoration(
@@ -184,7 +230,7 @@ class JsonProfileMain extends State<JsonProfileState>{
                                       });
                                     }
                                   ),
-                                  Text(
+                                  const Text(
                                     "Male",
                                     style: TextStyle(
                                       color: Colors.black,
@@ -208,7 +254,7 @@ class JsonProfileMain extends State<JsonProfileState>{
                                       });
                                     }
                                   ),
-                                  Text(
+                                  const Text(
                                     "Female",
                                     style: TextStyle(
                                       color: Colors.black,
@@ -232,7 +278,7 @@ class JsonProfileMain extends State<JsonProfileState>{
                                       });
                                     }
                                   ),
-                                  Text(
+                                  const Text(
                                     "Transgender",
                                     style: TextStyle(
                                       color: Colors.black,
@@ -258,12 +304,30 @@ class JsonProfileMain extends State<JsonProfileState>{
                                 formKey.currentState!.save();
                                 var connectivity = await(Connectivity().checkConnectivity());
                                 if(connectivity == ConnectivityResult.wifi || connectivity == ConnectivityResult.mobile){
-                                  //UpdateData(sFirstName,sLastName,sEmail,sContact,sPassword,sGender);
+                                  updateData(sId,sFirstName,sLastName,sEmail,sContact,sPassword,sGender);
                                 }
                               }
                             }, 
-                            child: Text(
+                            child: const Text(
                               "Update",
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20.0),),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: Container(
+                          width: 150.0,
+                          height: 40.0,
+                          color: Colors.brown.shade400,
+                          child: TextButton(
+                            onPressed: () async {
+                              var sp = await SharedPreferences.getInstance();
+                              sp.clear();
+                              Navigator.push(context, MaterialPageRoute(builder: (_)=>JsonLoginApp()));
+                            }, 
+                            child: const Text(
+                              "Logout",
                               style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20.0),),
                           ),
                         ),
@@ -290,17 +354,19 @@ class JsonProfileMain extends State<JsonProfileState>{
     );
   }
 
-  updateData(String firstName,String lastName, String email, String contact, String password, String gender) async {
+  updateData(String id,String firstName,String lastName, String email, String contact, String password, String gender) async {
+    var sp = await SharedPreferences.getInstance();
     var map = {
       "firstname" : firstName,
       "lastname" : lastName,
       "email" : email,
       "contact" : contact,
       "password" : password,
-      "gender" : gender
+      "gender" : gender,
+      "userid" : id
     };
 
-    var data = await http.post(Uri.parse(ConstantSp.SIGNUP_URL),body: map);
+    var data = await http.post(Uri.parse(ConstantSp.UPDATE_URL),body: map);
     if(data.statusCode == 200){
         var jsonData = jsonDecode(data.body);
         if(jsonData["status"] == true){
@@ -309,7 +375,13 @@ class JsonProfileMain extends State<JsonProfileState>{
             toastLength: Toast.LENGTH_LONG,
             gravity: ToastGravity.BOTTOM
           );
-          Navigator.pop(context);
+          
+          sp.setString(ConstantSp.FIRSTNAME,firstName);
+          sp.setString(ConstantSp.LASTNAME,lastName);
+          sp.setString(ConstantSp.EMAIL,email);
+          sp.setString(ConstantSp.CONTACT,contact);
+          sp.setString(ConstantSp.GENDER,gender);
+
         }
         else{
           Fluttertoast.showToast(

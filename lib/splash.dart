@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashDemo extends StatelessWidget{
+  const SplashDemo({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,8 @@ class SplashDemo extends StatelessWidget{
 }
 
 class SplashState extends StatefulWidget{
+  const SplashState({super.key});
+
 
   @override
   SplashMain createState() => SplashMain();
@@ -45,8 +49,8 @@ class SplashMain extends State<SplashState>{
   Future<Timer> startTimerMethod() async{
     var sp = await SharedPreferences.getInstance();
     var sUserId = sp.getString(ConstantSp.USERID) ?? "";
-    return new Timer(
-      Duration(seconds: 3), 
+    return Timer(
+      const Duration(seconds: 3), 
       (){
         if(sUserId == ""){
           Navigator.push(context, MaterialPageRoute(builder: (_)=> JsonLoginApp()));

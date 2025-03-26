@@ -4,6 +4,8 @@ import 'package:ecommerce_on_25/status.dart';
 import 'package:flutter/material.dart';
 
 class TabState extends StatefulWidget{
+  const TabState({super.key});
+
 
   @override
   TabMain createState() => TabMain();
@@ -30,7 +32,7 @@ class TabMain extends State<TabState> with SingleTickerProviderStateMixin{
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             "Tab Layout",
             style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
           ),
@@ -44,7 +46,7 @@ class TabMain extends State<TabState> with SingleTickerProviderStateMixin{
 
   getTabView(){
     return TabBar(
-      tabs: [
+      tabs: const [
         Tab(text: "Chat",),
         Tab(text: "Status",),
         Tab(text: "Call",),
@@ -58,8 +60,8 @@ class TabMain extends State<TabState> with SingleTickerProviderStateMixin{
 
   getTabPage(){
     return TabBarView(
-      children: tabArray,
       controller: tabController,
+      children: tabArray,
     );    
   }
 
