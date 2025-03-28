@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:ecommerce_on_25/constantSp.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 
 class JsonProfileState extends StatefulWidget{
   const JsonProfileState({super.key});
@@ -22,6 +24,7 @@ class JsonProfileMain extends State<JsonProfileState>{
   late String sId,sFirstName,sLastName,sEmail,sContact, sPassword, sGender,sProfile;
   int iGroupValue = 4;
   var firstNameController,lastNameController,emailController,contactController;
+  File? imageFile;
 
   @override
   void initState() {
@@ -78,10 +81,22 @@ class JsonProfileMain extends State<JsonProfileState>{
           child: Center(
             child: Column(
               children: [
-                Image.asset(
-                  'asset/icons/map_pointer.png',
-                  width: 100.0,
-                  height: 100.0,
+                GestureDetector(
+                  onTap: (){
+                    showAlertDialog(context);
+                  },
+                  child: imageFile == null ?
+                    Image.asset(
+                      'asset/icons/map_pointer.png',
+                      width: 100.0,
+                      height: 100.0,
+                      fit: BoxFit.cover,
+                    ):
+                    Image.file(
+                      imageFile!,
+                      width: 100.0,
+                      height: 100.0,
+                    )
                 ),
                 Form(
                   key: formKey,
@@ -304,7 +319,7 @@ class JsonProfileMain extends State<JsonProfileState>{
                                 formKey.currentState!.save();
                                 var connectivity = await(Connectivity().checkConnectivity());
                                 if(connectivity == ConnectivityResult.wifi || connectivity == ConnectivityResult.mobile){
-                                  updateData(sId,sFirstName,sLastName,sEmail,sContact,sPassword,sGender);
+                                  updateData(imageFile,sId,sFirstName,sLastName,sEmail,sContact,sPassword,sGender);
                                 }
                               }
                             }, 
@@ -344,6 +359,57 @@ class JsonProfileMain extends State<JsonProfileState>{
     );
   }
 
+  showAlertDialog(BuildContext context){
+
+    Widget cancelButton = TextButton(
+      onPressed: (){
+        openCamera();
+      }, 
+      child: Text("Camera")
+    );
+
+    Widget continueButton = TextButton(
+      onPressed: (){
+        openGallery();
+      }, 
+      child: Text("Gallery")
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text("Select Application"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return alert;
+      }
+    );
+
+  }
+
+  openGallery() async{
+    XFile? pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if(pickedFile != null){
+      setState(() {
+        imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
+  openCamera() async{
+    XFile? pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+    if(pickedFile != null){
+      setState(() {
+        imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
   void setGender(value,message){
     iGroupValue = value;
     sGender = message;
@@ -354,7 +420,7 @@ class JsonProfileMain extends State<JsonProfileState>{
     );
   }
 
-  updateData(String id,String firstName,String lastName, String email, String contact, String password, String gender) async {
+  updateData(File? imageFile, String id,String firstName,String lastName, String email, String contact, String password, String gender) async {
     var sp = await SharedPreferences.getInstance();
     var map = {
       "firstname" : firstName,
@@ -366,37 +432,81 @@ class JsonProfileMain extends State<JsonProfileState>{
       "userid" : id
     };
 
-    var data = await http.post(Uri.parse(ConstantSp.UPDATE_URL),body: map);
-    if(data.statusCode == 200){
-        var jsonData = jsonDecode(data.body);
-        if(jsonData["status"] == true){
-          Fluttertoast.showToast(
-            msg: jsonData["message"],
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM
-          );
-          
-          sp.setString(ConstantSp.FIRSTNAME,firstName);
-          sp.setString(ConstantSp.LASTNAME,lastName);
-          sp.setString(ConstantSp.EMAIL,email);
-          sp.setString(ConstantSp.CONTACT,contact);
-          sp.setString(ConstantSp.GENDER,gender);
+    if(imageFile != null ){
+      var length = await imageFile.length();
+      Map<String,String> headerData = {"Accept":"application/json"};
+      http.MultipartRequest request = http.MultipartRequest("POST",Uri.parse(ConstantSp.UPDATE_IMAGE_URL))
+      ..headers.addAll(headerData)
+      ..fields.addAll(map)
+      ..files.add(http.MultipartFile('file', imageFile.openRead(), length, filename: '$firstName.jpg'));
 
-        }
-        else{
-          Fluttertoast.showToast(
-            msg: jsonData["message"],
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM
-          );
-        }
+      var data = await http.Response.fromStream(await request.send());
+      if(data.statusCode == 200){
+          var jsonData = jsonDecode(data.body);
+          if(jsonData["status"] == true){
+            Fluttertoast.showToast(
+              msg: jsonData["message"],
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM
+            );
+            
+            sp.setString(ConstantSp.FIRSTNAME,firstName);
+            sp.setString(ConstantSp.LASTNAME,lastName);
+            sp.setString(ConstantSp.EMAIL,email);
+            sp.setString(ConstantSp.CONTACT,contact);
+            sp.setString(ConstantSp.GENDER,gender);
+            sp.setString(ConstantSp.PROFILE,jsonData["Profile"]);
+
+          }
+          else{
+            Fluttertoast.showToast(
+              msg: jsonData["message"],
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM
+            );
+          }
+      }
+      else{
+        Fluttertoast.showToast(
+          msg: "Server Error Code : ${data.statusCode}",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM
+        );
+      }
     }
     else{
-      Fluttertoast.showToast(
-        msg: "Server Error Code : ${data.statusCode}",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM
-      );
+      var data = await http.post(Uri.parse(ConstantSp.UPDATE_URL),body: map);
+      if(data.statusCode == 200){
+          var jsonData = jsonDecode(data.body);
+          if(jsonData["status"] == true){
+            Fluttertoast.showToast(
+              msg: jsonData["message"],
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM
+            );
+            
+            sp.setString(ConstantSp.FIRSTNAME,firstName);
+            sp.setString(ConstantSp.LASTNAME,lastName);
+            sp.setString(ConstantSp.EMAIL,email);
+            sp.setString(ConstantSp.CONTACT,contact);
+            sp.setString(ConstantSp.GENDER,gender);
+
+          }
+          else{
+            Fluttertoast.showToast(
+              msg: jsonData["message"],
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM
+            );
+          }
+      }
+      else{
+        Fluttertoast.showToast(
+          msg: "Server Error Code : ${data.statusCode}",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM
+        );
+      }
     }
 
   }

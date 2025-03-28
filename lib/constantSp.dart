@@ -4,6 +4,7 @@ class ConstantSp{
   static final String SIGNUP_URL = "${BASE_URL}signup.php";
   static final String LOGIN_URL = "${BASE_URL}login.php";
   static final String UPDATE_URL = "${BASE_URL}updateProfile.php";
+  static final String UPDATE_IMAGE_URL = "${BASE_URL}updateProfileImage.php";
 
   static const String USERID = "userid";
   static const String FIRSTNAME = "firstname";
